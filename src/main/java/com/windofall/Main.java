@@ -1,6 +1,6 @@
-package org.windofall;
+package com.windofall;
 
-import org.windofall.UI.Recipe;
+import com.windofall.UI.Recipe;
 
 public class Main {
     public static void main(String[] args) {

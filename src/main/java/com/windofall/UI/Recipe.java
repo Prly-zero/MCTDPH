@@ -1,4 +1,4 @@
-package org.windofall.UI;
+package com.windofall.UI;
 
 import javax.swing.*;
 
