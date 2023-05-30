@@ -1,13 +1,9 @@
 package com.windofall.UI;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.Arrays;
-
 public class Recipe extends JFrame {
     public Recipe(){
         this.setTitle("合成表添加");
@@ -40,8 +36,10 @@ public class Recipe extends JFrame {
         public void actionPerformed(ActionEvent e) {
             JFileChooser jf = new JFileChooser();
             jf.showOpenDialog(getParent());
-            JButton jb =(JButton)e.getSource();
-            jb.setIcon(new ImageIcon(new ImageIcon(jf.getSelectedFile().getPath()).getImage().getScaledInstance(64,64,Image.SCALE_DEFAULT)));
+            JButton jb = (JButton) e.getSource();
+            if(jf.getSelectedFile()!=null){
+            jb.setIcon(new ImageIcon(new ImageIcon(jf.getSelectedFile().getPath()).getImage().getScaledInstance(64, 64, Image.SCALE_DEFAULT)));
+            }
         }
     }
 }
