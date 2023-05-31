@@ -6,9 +6,9 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 public class Recipe extends JFrame {
     private String[] items = new String[10];
@@ -22,7 +22,7 @@ public class Recipe extends JFrame {
         JPanel jp = new JPanel();
         jp.setLayout(null);
         JLabel backimg = new JLabel();
-        Image image = new ImageIcon(this.getClass().getResource("/assets/crafting.png")).getImage().getScaledInstance(786,590,Image.SCALE_DEFAULT);
+        Image image = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/assets/crafting.png"))).getImage().getScaledInstance(786,590,Image.SCALE_DEFAULT);
         backimg.setIcon(new ImageIcon(image));
         backimg.setBounds(0,-30,800,600);
         int a=56,b=-28,bor=70,bord=bor+10,borb=bor+10;
@@ -171,7 +171,7 @@ public class Recipe extends JFrame {
             jf0.setFileFilter(ff);
             jf0.showSaveDialog(getParent());
             String filn=jf0.getSelectedFile().getName();
-            if(filn.indexOf(".json")==-1){
+            if(!filn.contains(".json")){
                 filn+=".json";
             }
             try {
@@ -180,8 +180,6 @@ public class Recipe extends JFrame {
                 byte[] bytes = c.getBytes();
                 fs.write(bytes);
                 fs.close();
-            } catch (FileNotFoundException ex) {
-                throw new RuntimeException(ex);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
