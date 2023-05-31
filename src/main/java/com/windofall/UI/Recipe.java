@@ -71,7 +71,7 @@ public class Recipe extends JFrame {
                         jb0.setIcon(new ImageIcon(new ImageIcon(jf.getSelectedFile().getPath()).getImage().getScaledInstance(64, 64, Image.SCALE_DEFAULT)));
                         for(int m=0;m<10;m++){
                             if(jb[m]==jb0){
-                                items[m]=(jf.getSelectedFile().getName()+"\b\b\b\b").replace("@",":");
+                                items[m]=jf.getSelectedFile().getName().replace(".png","").replace("@",":");
                             }
                         }
                     }
@@ -162,7 +162,7 @@ public class Recipe extends JFrame {
                         break;
                     }
                 }
-                c+="\b";
+                c=c.substring(0,c.length()-1);
             }
             c+="\n    },\n    \"result\":{\n        \"item\":\""+items[9]+"\",\n        \"count\":"+count+"\n    }\n}";
             System.out.println(c);
