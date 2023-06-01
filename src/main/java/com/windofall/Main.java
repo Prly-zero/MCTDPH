@@ -16,12 +16,9 @@ public class Main {
             File f= new File(path+"\\MCDPH\\item\\");
             if(!f.exists()){f.mkdirs();}
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
-                 UnsupportedLookAndFeelException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+                 UnsupportedLookAndFeelException | IOException e) {
             throw new RuntimeException(e);
         }
-
         new Recipe();
     }
 }

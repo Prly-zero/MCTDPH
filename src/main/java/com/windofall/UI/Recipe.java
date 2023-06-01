@@ -17,8 +17,9 @@ public class Recipe extends JFrame {
     private String[] items = new String[10];
     private int count = 1;
     private JButton[] jb = new JButton[10];
-    private JButton[] fjb = new JButton[10];
+
     public Recipe(){
+        JButton[] fjb = new JButton[10];
         int a=56,b=-28,bor=70,bord=bor+10,borb=bor+10;
         int fbp=37,fbpa=81;
         int indexmark=10;
@@ -59,8 +60,12 @@ public class Recipe extends JFrame {
         fjb[1].setBounds(fbp+fbpa,460,bor,bor);
         fjb[2].setBounds(fbp+fbpa*2,460,bor,bor);
         jp.add(jb[9],9);
-        for(int i=0;i< fjb.length;i++){
-            if(fjb[i]!=null){jp.add(fjb[i],indexmark++);}else{break;}
+        for (JButton jButton : fjb) {
+            if (jButton != null) {
+                jp.add(jButton, indexmark++);
+            } else {
+                break;
+            }
         }
         jp.add(backimg,indexmark);
         this.add(jp);
@@ -74,7 +79,7 @@ public class Recipe extends JFrame {
             JButton jb0 = (JButton) e.getSource();
             if(e.getButton()==MouseEvent.BUTTON1){
                 if(e.getClickCount()==2) {
-                    JFileChooser jf = new JFileChooser();
+                    JFileChooser jf = new JFileChooser(Main.path+"\\MCDPH\\item\\");
                     FileNameExtensionFilter fef=new FileNameExtensionFilter("重置贴图文件(*.png)","png");
                     jf.setFileFilter(fef);
                     jf.showOpenDialog(getParent());
@@ -251,7 +256,7 @@ public class Recipe extends JFrame {
         }
     }
     class UnP implements MouseListener{
-        String mod_id="";
+        String modId ="";
         @Override
         public void mouseClicked(MouseEvent e) {
             JFileChooser jf=new JFileChooser();
@@ -261,20 +266,19 @@ public class Recipe extends JFrame {
 
             try {
                 JarFile jarf = new JarFile(jf.getSelectedFile());
-                String c="";
-
                 for(Enumeration<JarEntry> enums = jarf.entries();enums.hasMoreElements();){
                     JarEntry jare = enums.nextElement();
                     String filn=jare.getName();
                     if (filn.contains("assets/")&&filn.endsWith("/textures/")){
                         filn=filn.replace("assets/","");
-                        mod_id=filn.replace("/textures/","");
+                        modId=filn.replace("/textures/","");
                     }
                     if(filn.contains("assets/")&&filn.contains("/textures/item/")&&filn.endsWith(".png")){
                         filn=filn.replace("assets/","");
-                        filn=filn.replace(mod_id,"");
+                        filn=filn.replace(modId,"");
                         filn=filn.replace("/textures/item/","");
-                        filn=mod_id+"@"+filn;
+                        filn=filn.replace("/","_");
+                        filn=modId+"@"+filn;
                         InputStream imgd = jarf.getInputStream(jare);
                         File imgf = new File(Main.path+"\\MCDPH\\item\\"+filn);
                         FileOutputStream imgout = new FileOutputStream(imgf);
