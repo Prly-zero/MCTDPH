@@ -1,20 +1,27 @@
 package com.windofall.UI;
 
+import com.windofall.Main;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.Enumeration;
 import java.util.Objects;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public class Recipe extends JFrame {
     private String[] items = new String[10];
     private int count = 1;
-    JButton[] jb = new JButton[10];
+    private JButton[] jb = new JButton[10];
+    private JButton[] fjb = new JButton[10];
     public Recipe(){
+        int a=56,b=-28,bor=70,bord=bor+10,borb=bor+10;
+        int fbp=37,fbpa=81;
+        int indexmark=10;
         this.setResizable(false);
         this.setTitle("合成表添加");
         this.setSize(800,600);
@@ -25,7 +32,6 @@ public class Recipe extends JFrame {
         Image image = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/assets/crafting.png"))).getImage().getScaledInstance(786,590,Image.SCALE_DEFAULT);
         backimg.setIcon(new ImageIcon(image));
         backimg.setBounds(0,-30,800,600);
-        int a=56,b=-28,bor=70,bord=bor+10,borb=bor+10;
         for(int i=0; i<3;i++){
             for(int j=0;j<3;j++){
                 jb[i*3+j]=new JButton();
@@ -37,21 +43,26 @@ public class Recipe extends JFrame {
             a=56;
             b+=borb;
         }
-        JButton create = new JButton();
-        JButton coutrl = new JButton();
-        coutrl.setText(""+count);
-        create.setText("create");
-        coutrl.addMouseListener(new Cou());
-        create.addMouseListener(new Cre());
-        coutrl.setBounds(118,460,bor,bor);
-        create.setBounds(37,460,bor,bor);
         jb[9]=new JButton();
         jb[9].setBounds(a+70*7-8,b-96,105,105);
         jb[9].addMouseListener(new Se());
+        fjb[0] = new JButton();
+        fjb[1] = new JButton();
+        fjb[2] = new JButton();
+        fjb[0].setText("create");
+        fjb[1].setText(""+count);
+        fjb[2].setText("UnP");
+        fjb[0].addMouseListener(new Cre());
+        fjb[1].addMouseListener(new Cou());
+        fjb[2].addMouseListener(new UnP());
+        fjb[0].setBounds(fbp,460,bor,bor);
+        fjb[1].setBounds(fbp+fbpa,460,bor,bor);
+        fjb[2].setBounds(fbp+fbpa*2,460,bor,bor);
         jp.add(jb[9],9);
-        jp.add(create,10);
-        jp.add(coutrl,11);
-        jp.add(backimg,12);
+        for(int i=0;i< fjb.length;i++){
+            if(fjb[i]!=null){jp.add(fjb[i],indexmark++);}else{break;}
+        }
+        jp.add(backimg,indexmark);
         this.add(jp);
         this.setVisible(true);
     }
@@ -216,6 +227,67 @@ public class Recipe extends JFrame {
                 count-=1;
                 if(e.isControlDown()){count=1;}
                 ((JButton)e.getSource()).setText(""+count);
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+    }
+    class UnP implements MouseListener{
+        String mod_id="";
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            JFileChooser jf=new JFileChooser();
+            FileNameExtensionFilter ff = new FileNameExtensionFilter("mod文件(*jar)","jar");
+            jf.setFileFilter(ff);
+            jf.showOpenDialog(getParent());
+
+            try {
+                JarFile jarf = new JarFile(jf.getSelectedFile());
+                String c="";
+
+                for(Enumeration<JarEntry> enums = jarf.entries();enums.hasMoreElements();){
+                    JarEntry jare = enums.nextElement();
+                    String filn=jare.getName();
+                    if (filn.contains("assets/")&&filn.endsWith("/textures/")){
+                        filn=filn.replace("assets/","");
+                        mod_id=filn.replace("/textures/","");
+                    }
+                    if(filn.contains("assets/")&&filn.contains("/textures/item/")&&filn.endsWith(".png")){
+                        filn=filn.replace("assets/","");
+                        filn=filn.replace(mod_id,"");
+                        filn=filn.replace("/textures/item/","");
+                        filn=mod_id+"@"+filn;
+                        InputStream imgd = jarf.getInputStream(jare);
+                        File imgf = new File(Main.path+"\\MCDPH\\item\\"+filn);
+                        FileOutputStream imgout = new FileOutputStream(imgf);
+                        while(imgd.available()>0){
+                            imgout.write(imgd.read());
+                        }
+                        imgd.close();
+                        imgout.close();
+                    }
+                }
+                System.out.println("资源提取完毕");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
             }
         }
 
